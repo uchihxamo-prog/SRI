@@ -1,0 +1,35 @@
+Servicios de Streaming - Servicios en Red Índice Descarga directa vs StreamingTopología de redCapa de transporte: TCP vs UDPQoS: Jitter, BufferProtocolos streamingIcecast1. 
+Descarga directa vs Streaming 
+Descarga Directa: El usuario demanda un fichero (ej. 100MB, 10 min). Se descarga completamente, se almacena en el buffer y comienza la reproducción. Si el usuario para a los 2 minutos, el servidor ya ha entregado los 100MB completos. 
+Streaming: Datos enviados en flujo constante. No hay almacenamiento local permanente. Solo se consume el ancho de banda utilizado (siguiendo el ejemplo anterior, solo los 2 minutos visualizados). 
+2. Topología de red Unicast Mecánica: Conexión 1 a 1 (estándar de internet). Para 100 oyentes, el servidor abre 100 sockets TCP y envía la información 100 veces.
+Cálculo de Ancho de Banda: $BW(tot) = BW(stream) \times N(usuarios)$.
+Desventaja: Poco escalable. 
+Multicast Mecánica: El servidor envía la información a una dirección específica (224.0.0.0 - 239.255.255.255). Los routers replican el paquete solo si tienen suscriptores. 
+Desventaja: Muchos routers bloquean estos paquetes. Solo es viable en redes internas. 3. Capa de transporte: TCP vs UDP TCP: Si se pierde un paquete, se reenvía (ACK/NACK). 
+Ventaja: Calidad garantizada y atraviesa firewalls/proxies fácilmente. 
+Desventaja: Alta latencia por las retransmisiones. 
+UDP: Sacrifica calidad a cambio de una latencia mínima. 
+4. QoS: Jitter, Buffer Jitter (Fluctuación): Variación en el tiempo de llegada de los paquetes. Si es superior al buffer, se producen cortes (Buffer Underrun). 
+Buffer (Amortiguador): Memoria temporal para absorber el Jitter. A mayor buffer, más estabilidad pero mayor latencia. 
+Burst-on-Connect: Característica de Icecast que envía los datos iniciales a máxima velocidad para llenar el buffer del cliente casi instantáneamente.
+5. Protocolos de Streaming Modelos de Capa de Aplicación
+HTTP Legacy (ICY): Usado por Icecast2. Flujo continuo de bytes vía TCP. 
+HTTP Adaptativo (HLS/DASH): El servidor trocea el fichero en chunks (2-10s). Permite calidad adaptativa mediante un Manifest.
+Real-Time:
+RTMP: Sobre TCP. Usado para ingesta (OBS a servidores).
+RTSP: Usado en CCTV. UDP para datos y TCP para control.
+WebRTC: Videoconferencia P2P vía UDP en navegador. 
+Cuadro Resumen ProtocoloBaseLatenciaUso PrincipalIcecast (ICY)TCP/HTTP10s - 30sRadio OnlineHLS 
+/ DASHTCP/HTTP15s - 45sNetflix, YouTube
+RTMP TCP2s - 5sIngesta (OBS)WebRTCUDP/TCP< 0.5sZoom, Meet, Discord
+RTSP UDP+TCP< 1sCámaras IP6. Icecast 2 Servidor de streaming de código abierto que actúa como una "antena de radio virtual". 
+Formatos: OGG / MP3. Puntos de montaje: Permite diferentes emisiones (ej. /radio-asir). 
+Instalación básica: apt install icecast2. 
+Códecs y Cálculos Códecs: Algoritmos de compresión/descompresión (Audio: MP3, AAC; Vídeo: H.264, H.265). 
+Cálculo Peso WAV: $P = \text{Frecuencia} \times \text{Profundidad} \times \text{Canales} \times \text{Tiempo(s)}$. Vídeo: Introduce el concepto de Contenedor (MP4, MKV) que incluye vídeo, audio y metadatos.
+Ejemplo de Práctica con FFmpeg Bash# Cambio de contenedor (Remuxing)
+ffmpeg -i original.mp4 -c:v copy -c:a copy salida.mkv
+
+# Comprimir a H.264 con bitrate de 2Mbps
+ffmpeg -i original.mp4 -c:v libx264 -b:v 2M -c:a copy h264_2mbps.mp4
