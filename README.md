@@ -1,1 +1,68 @@
-# SRI
+
+
+🛠️ Fase 1: Configuración del Servidor (Ubuntu Server)
+1.1 Configuración de Red (Adaptador Puente)
+
+<img width="1280" height="800" alt="icecast1" src="https://github.com/user-attachments/assets/136e6bc5-5071-44b2-9429-d9d639f9dd00" />
+
+
+1.2 Verificación de Sonido e Instalación de Icecast2
+
+    Comprobación de sonido: aplay -l o speaker-test.
+
+    Instalación:
+    Bash
+
+    sudo apt update && sudo apt install icecast2 -y
+
+    Estado del servicio: systemctl status icecast2
+
+🎧 Fase 2: Configuración del DJ (Ubuntu Desktop)
+2.1 Entorno y Mixxx
+
+    Red: Configurada en modo puente para alcanzar al servidor.
+
+    Instalación de Mixxx:
+    Bash
+
+    sudo add-apt-repository ppa:mixxx/mixxx
+    sudo apt update && sudo apt install mixxx -y
+
+2.2 Creación de la Radio (/tu_nombre)
+
+Configuración de la conexión en Mixxx (Preferencias -> Live Broadcasting):
+
+    Tipo de servidor: Icecast2
+
+  
+
+    Mount: /cris
+
+    Puerto: 8000
+
+🖥️ Fase 3: Pruebas de Funcionamiento (Anfitrión)
+
+Se ha verificado la emisión desde el equipo anfitrión accediendo a la URL: http://[IP_DEL_SERVIDOR]:8000/manu
+Medio de Prueba	Resultado	Observaciones
+Navegador Web	✅ Funciona	Probado en Chrome/Firefox
+VLC Player	✅ Funciona	Abrir volcado de red
+
+    Nota: Para VLC, se usó la opción "Abrir ubicación de red" con la URL completa del mountpoint.
+
+🤝 Fase 4: Interconexión con Compañeros
+
+Se ha realizado la prueba cruzada con el compañero: [Nombre del compañero].
+
+    URL de la radio del compañero: http://[IP_COMPAÑERO]:8000/[MOUNT]
+
+    Resultado: Conexión exitosa y audio fluido.
+
+📸 Capturas de Pantalla (Evidencias)
+
+(Sugerencia: Sube las fotos a una carpeta /img en tu repo y enlázalas aquí)
+
+    Servidor Icecast funcionando: ![Icecast Status](img/icecast_status.png)
+
+    Mixxx conectado: ![Mixxx Config](img/mixxx_config.png)
+
+    Escuchando en VLC: ![VLC Evidence](img/vlc_prueba.png)
