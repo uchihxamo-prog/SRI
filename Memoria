@@ -33,3 +33,122 @@ ffmpeg -i original.mp4 -c:v copy -c:a copy salida.mkv
 
 # Comprimir a H.264 con bitrate de 2Mbps
 ffmpeg -i original.mp4 -c:v libx264 -b:v 2M -c:a copy h264_2mbps.mp4
+
+
+**bits (b):** Se usan para medir el **Ancho de Banda** y el **Bitrate** (velocidad).
+    * *Ejemplo:* 100 Mbps (Megabits por segundo).
+* **Bytes (B):** Se usan para medir el **Almacenamiento** (peso del archivo).
+    * *Ejemplo:* 500 GB (Gigabytes de disco).
+
+DE GB A MB HAY QUE X 1024 Y DE MB A Mb x 8
+
+## 1. Video RAW (4K)
+Calculamos el bitrate resultante para un flujo de video sin compresión.
+
+### Datos:
+* **Resolución:** $3840 \times 2160$ (UHD)
+* **Frecuencia de imagen:** 60 fps
+* **Profundidad de color:** 30 bits
+
+Bitrate = \Resolución Horizontal \Resolución Vertical \FPS\Profundidad de 
+
+### Datos:
+* **Frecuencia de muestreo:** 44.1 kHz (44,100 Hz)
+* **Profundidad de bits:** 16 bits
+* **Canales:** 2 (Estéreo)
+* **Duración:** 5 minutos (300 segundos)
+
+### Fórmula:
+$$Tamaño = \frac{\text{Frecuencia (Hz)} \times \text{Bits} \times \text{Canales} \times \text{Segundos}}{8 \times 1,000,000}$$
+Bitrate=Frecuencia Bits Canales
+
+
+porcentaje de uso = bitrate del directo/ancho de banda de subida x 100
+Para determinar la cantidad de usuarios (o conexiones simultáneas):
+
+Usuarios = \frac{Capacidad total de la línea/{Bitrate por usuario}}$$
+
+**Fórmula:** (Bitrate * Oyentes) 
+
+
+Tamaño = Bitrate (Gbps) x Tiempo (s) /8
+
+
+Tienes un disco de 500 GB. ¿Cuántas horas de vídeo HD a 2 Mbps podrías alojar aproximadamente?
+* **Datos:** Disco de 500 GB, Video a 2 Mbps.
+* **Fórmula:** Horas = (Capacidad GB * 8,000) / (Bitrate Mbps * 3,600)
+* **Resultado:** 4,000,000 / 7,200 = **555.55 horas**
+
+Si emites un streaming de audio a un bitrate constante (CBR) de 128 kbps y tienes 25 oyentes simultáneos en una red Unicast, ¿cuál es el ancho de banda total consumido?
+Oyentes = Límite de Subida (kbps)/Bitrate por Oyente
+
+# Guía de Cálculos: Streaming y Audio
+
+Resumen de fórmulas para gestión de ancho de banda y almacenamiento.
+
+---
+
+## Conversiones Básicas
+* **Bytes a bits:** x 8
+* **bits a Bytes:** / 8
+* **Multicast:** x 1 (flujo único)
+
+---
+
+## 1. Porcentaje de Uso de Red
+Calcula la carga que genera el streaming sobre tu conexión.
+
+**Fórmula:**
+(Bitrate del directo / Ancho de banda de subida) * 100 = % de uso
+
+---
+
+## 2. Tiempo de Grabación en Disco
+Para saber cuántas horas de video puedes guardar.
+
+1. **Capacidad a Megabits:** MB * 8 = Mb
+2. **Segundos totales:** Mb / Bitrate (Mbps) = Segundos
+3. **Pasar a horas:** Segundos / 3600 = Horas
+
+---
+
+## 3. Peso de Audio Digital (Calidad CD)
+Para calcular el tamaño de un archivo de audio.
+
+**Paso 1: Bitrate (bps)**
+Frecuencia * Profundidad * Canales = bps
+
+**Paso 2: Peso Total**
+1. (bps * segundos) = Total bits
+2. Total bits / 8 = Bytes
+3. Bytes / 1.000.000 = Megabytes (MB)
+
+---
+
+## 4. Capacidad de Oyentes
+Determina cuántos usuarios soporta tu servidor.
+
+**Ejemplo:**
+* Subida: 100 Mbps (100.000 Kbps)
+* Calidad de audio: 256 Kbps
+
+**Cálculo:**
+100.000 / 256 = 390 oyentes
+
+---
+
+## 5. Espacio Total (Resumen)
+1. Convertir duración a Segundos.
+2. Peso Total = Segundos * (Bitrate en Mbps / 8).
+3. Convertir resultado a GB (Dividir entre 1024).
+
+
+Un usuario quiere escuchar un archivo de 100 MB. Si su conexión es de 10 Mbps, ¿cuánto tiempo tardará en completarse la "Descarga Directa" antes de asegurar que no haya cortes?
+
+pasar todo a las mismas unidades y dividir
+
+
+Una canción de 4 minutos pesa 42,33 MB en formato WAV. Si se comprime a MP3 a 128 kbps, ¿cuál será su nuevo peso aproximado?
+Duración: 240s
+* Bitrate: 128 kbps
+* Cálculo: (240 * 128) / 8 / 1024 = 3,75 MB
